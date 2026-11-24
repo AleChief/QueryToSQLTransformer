@@ -1,0 +1,611 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcssch="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.17">
+	<Title>
+		<v8:item>
+			<v8:lang>en</v8:lang>
+			<v8:content>Query to SQL transformer</v8:content>
+		</v8:item>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Транслятор запросов 1С в SQL</v8:content>
+		</v8:item>
+	</Title>
+	<Width>120</Width>
+	<Height>40</Height>
+	<AutoTitle>false</AutoTitle>
+	<AutoCommandBar name="FormCommandBar" id="-1">
+		<ChildItems>
+			<Button name="TransformButton" id="1">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.Transform</CommandName>
+				<DefaultButton>true</DefaultButton>
+				<ExtendedTooltip name="TransformButtonExtendedTooltip" id="2"/>
+			</Button>
+			<Button name="QueryBuilderButton" id="3">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.OpenQueryBuilder</CommandName>
+				<ExtendedTooltip name="QueryBuilderButtonExtendedTooltip" id="4"/>
+			</Button>
+			<Button name="ClearButton" id="5">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.ClearAll</CommandName>
+				<ExtendedTooltip name="ClearButtonExtendedTooltip" id="6"/>
+			</Button>
+			<Button name="CloseButton" id="7">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.StandardCommand.Close</CommandName>
+				<ExtendedTooltip name="CloseButtonExtendedTooltip" id="8"/>
+			</Button>
+			<Button name="ProjectButton" id="72">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.OpenProject</CommandName>
+				<TextColor>#FFFFFF</TextColor>
+				<BackColor>#24292F</BackColor>
+				<Title>
+					<v8:item>
+						<v8:lang>en</v8:lang>
+						<v8:content>New versions on GitHub</v8:content>
+					</v8:item>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Новые версии на GitHub</v8:content>
+					</v8:item>
+				</Title>
+				<ToolTip>
+					<v8:item>
+						<v8:lang>en</v8:lang>
+						<v8:content>Free download on GitHub; the article and the file are also on Infostart. New versions are published only on GitHub.</v8:content>
+					</v8:item>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Скачать бесплатно можно на GitHub; статья и файл есть и на Инфостарте. Новые версии выходят только на GitHub.</v8:content>
+					</v8:item>
+				</ToolTip>
+				<ExtendedTooltip name="ProjectButtonExtendedTooltip" id="73"/>
+			</Button>
+			<Button name="ArticleButton" id="74">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.OpenArticle</CommandName>
+				<TextColor>#FFFFFF</TextColor>
+				<BackColor>#C8402A</BackColor>
+				<Title>
+					<v8:item>
+						<v8:lang>en</v8:lang>
+						<v8:content>Article on Infostart</v8:content>
+					</v8:item>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Статья на Инфостарте</v8:content>
+					</v8:item>
+				</Title>
+				<ToolTip>
+					<v8:item>
+						<v8:lang>en</v8:lang>
+						<v8:content>Free download on GitHub; the article and the file are also on Infostart. New versions are published only on GitHub.</v8:content>
+					</v8:item>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Скачать бесплатно можно на GitHub; статья и файл есть и на Инфостарте. Новые версии выходят только на GitHub.</v8:content>
+					</v8:item>
+				</ToolTip>
+				<ExtendedTooltip name="ArticleButtonExtendedTooltip" id="75"/>
+			</Button>
+		</ChildItems>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnCreateAtServer">OnCreateAtServer</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="SettingsGroup" id="10">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Target</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Цель</v8:content>
+				</v8:item>
+			</Title>
+			<Group>Horizontal</Group>
+			<ShowTitle>false</ShowTitle>
+			<Representation>None</Representation>
+			<ExtendedTooltip name="SettingsGroupExtendedTooltip" id="11"/>
+			<ChildItems>
+				<InputField name="Dialect" id="12">
+					<DataPath>Dialect</DataPath>
+					<Title>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>DBMS</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>СУБД</v8:content>
+						</v8:item>
+					</Title>
+					<ListChoiceMode>true</ListChoiceMode>
+					<ChoiceListButton>true</ChoiceListButton>
+					<Width>18</Width>
+					<ContextMenu name="DialectContextMenu" id="13"/>
+					<ExtendedTooltip name="DialectExtendedTooltip" id="14"/>
+				</InputField>
+				<InputField name="DateOffset" id="15">
+					<DataPath>DateOffset</DataPath>
+					<Title>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Date offset, years</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Смещение дат, лет</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Year offset the platform uses when storing dates. Usually 2000, sometimes 0.</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Смещение лет, с которым платформа хранит даты. Обычно 2000, иногда 0.</v8:content>
+						</v8:item>
+					</ToolTip>
+					<Width>8</Width>
+					<SpinButton>true</SpinButton>
+					<ContextMenu name="DateOffsetContextMenu" id="16"/>
+					<ExtendedTooltip name="DateOffsetExtendedTooltip" id="17"/>
+				</InputField>
+				<InputField name="SchemaName" id="18">
+					<DataPath>SchemaName</DataPath>
+					<Title>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Schema</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Схема</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>MS SQL only. Leave empty to emit unqualified table names.</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Только для MS SQL. Пустое значение — имена таблиц без схемы.</v8:content>
+						</v8:item>
+					</ToolTip>
+					<Width>10</Width>
+					<ContextMenu name="SchemaNameContextMenu" id="19"/>
+					<ExtendedTooltip name="SchemaNameExtendedTooltip" id="20"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+		<InputField name="QueryText" id="21">
+			<DataPath>QueryText</DataPath>
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>1C query</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запрос 1С</v8:content>
+				</v8:item>
+			</Title>
+			<TitleLocation>Top</TitleLocation>
+			<MultiLine>true</MultiLine>
+			<ExtendedEdit>true</ExtendedEdit>
+			<AutoMaxWidth>false</AutoMaxWidth>
+			<Height>12</Height>
+			<HorizontalStretch>true</HorizontalStretch>
+			<ContextMenu name="QueryTextContextMenu" id="22"/>
+			<ExtendedTooltip name="QueryTextExtendedTooltip" id="23"/>
+		</InputField>
+		<InputField name="ParameterText" id="33">
+			<DataPath>ParameterText</DataPath>
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Parameter values, one per line: Name = value</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Значения параметров, по одному в строке: Имя = значение</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Period = 2026-09-01, Company = 00000000-0000-0000-0000-000000000000, OnlyNew = true. The kind is inferred from the text. Values are put into the SQL as literals, which is what Power BI needs.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Период = 2026-09-01, Организация = 00000000-0000-0000-0000-000000000000, ТолькоНовые = true. Тип значения определяется по тексту. Значения подставляются в SQL литералами — так, как нужно Power BI.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<TitleLocation>Top</TitleLocation>
+			<MultiLine>true</MultiLine>
+			<AutoMaxWidth>false</AutoMaxWidth>
+			<Height>4</Height>
+			<HorizontalStretch>true</HorizontalStretch>
+			<ContextMenu name="ParameterTextContextMenu" id="34"/>
+			<ExtendedTooltip name="ParameterTextExtendedTooltip" id="35"/>
+		</InputField>
+		<InputField name="PrologueText" id="53">
+			<DataPath>PrologueText</DataPath>
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Missing queries that create the temporary tables this text relies on</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Недостающие запросы, которые создают временные таблицы для этого текста</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Leave empty unless the query fails with "Table X has no physical storage". Paste the SELECT ... INTO X queries that run before this one in the report. A table passed as a parameter (FROM &amp;X) is taken from a temporary table named X.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Заполнять, только если перевод отказывает из-за того, что у таблицы X нет физического хранения. Вставьте запросы ВЫБРАТЬ ... ПОМЕСТИТЬ X, которые в отчёте выполняются до этого. Таблица, переданная параметром (ИЗ &amp;X), берётся из временной таблицы с именем X.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<TitleLocation>Top</TitleLocation>
+			<MultiLine>true</MultiLine>
+			<AutoMaxWidth>false</AutoMaxWidth>
+			<Height>4</Height>
+			<HorizontalStretch>true</HorizontalStretch>
+			<ContextMenu name="PrologueTextContextMenu" id="54"/>
+			<ExtendedTooltip name="PrologueTextExtendedTooltip" id="55"/>
+		</InputField>
+		<InputField name="SQLText" id="24">
+			<DataPath>SQLText</DataPath>
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>SQL</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>SQL</v8:content>
+				</v8:item>
+			</Title>
+			<TitleLocation>Top</TitleLocation>
+			<ReadOnly>true</ReadOnly>
+			<MultiLine>true</MultiLine>
+			<ExtendedEdit>true</ExtendedEdit>
+			<AutoMaxWidth>false</AutoMaxWidth>
+			<Height>14</Height>
+			<HorizontalStretch>true</HorizontalStretch>
+			<VerticalStretch>true</VerticalStretch>
+			<ContextMenu name="SQLTextContextMenu" id="25"/>
+			<ExtendedTooltip name="SQLTextExtendedTooltip" id="26"/>
+		</InputField>
+		<InputField name="ErrorText" id="27">
+			<DataPath>ErrorText</DataPath>
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Diagnostics</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Диагностика</v8:content>
+				</v8:item>
+			</Title>
+			<TitleLocation>Top</TitleLocation>
+			<ReadOnly>true</ReadOnly>
+			<MultiLine>true</MultiLine>
+			<AutoMaxWidth>false</AutoMaxWidth>
+			<Height>4</Height>
+			<HorizontalStretch>true</HorizontalStretch>
+			<ContextMenu name="ErrorTextContextMenu" id="28"/>
+			<ExtendedTooltip name="ErrorTextExtendedTooltip" id="29"/>
+		</InputField>
+		<LabelDecoration name="Limitations" id="30">
+			<Title formatted="false">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>What the platform does outside the DBMS query is not in the SQL: totals, record level security, auto ordering, index hints, data separators. Whatever of that your query touches is listed in Diagnostics above, per query.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>То, что платформа делает вне запроса к СУБД, в SQL не попадает: итоги, ограничения доступа на уровне записей (RLS), автоупорядочивание, подсказки индексов, разделители данных. Что из этого затрагивает ваш запрос — указано в «Диагностике» выше, по каждому запросу.</v8:content>
+				</v8:item>
+			</Title>
+			<HorizontalStretch>true</HorizontalStretch>
+			<ContextMenu name="LimitationsContextMenu" id="31"/>
+			<ExtendedTooltip name="LimitationsExtendedTooltip" id="32"/>
+		</LabelDecoration>
+		<LabelDecoration name="About" id="60">
+			<Title formatted="false">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>QueryToSQLTransformer 0.3.0 · author Aleksei Iaskeliainen · MIT + Commons Clause licence · free download on GitHub, the article is on Infostart; new versions are published only on GitHub</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>QueryToSQLTransformer 0.3.0 · автор Aleksei Iaskeliainen · лицензия MIT + Commons Clause · скачать бесплатно можно на GitHub, статья на Инфостарте; новые версии выходят только на GitHub</v8:content>
+				</v8:item>
+			</Title>
+			<ContextMenu name="AboutContextMenu" id="61"/>
+			<ExtendedTooltip name="AboutExtendedTooltip" id="62"/>
+		</LabelDecoration>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Object" id="40">
+			<Type>
+				<v8:Type>cfg:ExternalDataProcessorObject.QueryToSQLTransformer</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="QueryText" id="41">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>1C query</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запрос 1С</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="SQLText" id="42">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>SQL</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>SQL</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ErrorText" id="43">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Diagnostics</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Диагностика</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="Dialect" id="44">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>DBMS</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>СУБД</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>20</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="SchemaName" id="45">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Schema</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Схема</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>50</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ParameterText" id="47">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Parameter values</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Значения параметров</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="PrologueText" id="56">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Missing queries</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Недостающие запросы</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="DateOffset" id="46">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Date offset</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Смещение дат</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>4</v8:Digits>
+					<v8:FractionDigits>0</v8:FractionDigits>
+					<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="Transform" id="50">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Transform</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Перевести</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Translate the 1C query into SQL for the selected DBMS</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Перевести запрос 1С в SQL выбранной СУБД</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>Transform</Action>
+		</Command>
+		<Command name="OpenQueryBuilder" id="51">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Query builder</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Конструктор запроса</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Edit the 1C query in the standard query builder</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Открыть запрос 1С в стандартном конструкторе запроса</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>OpenQueryBuilder</Action>
+		</Command>
+		<Command name="ClearAll" id="52">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Clear</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Очистить</v8:content>
+				</v8:item>
+			</Title>
+			<Action>ClearAll</Action>
+		</Command>
+		<Command name="OpenProject" id="76">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>New versions on GitHub</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Новые версии на GitHub</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Free download on GitHub; the article and the file are also on Infostart. New versions are published only on GitHub.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Скачать бесплатно можно на GitHub; статья и файл есть и на Инфостарте. Новые версии выходят только на GitHub.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>OpenProject</Action>
+		</Command>
+		<Command name="OpenArticle" id="77">
+			<Title>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Article on Infostart</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Статья на Инфостарте</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Free download on GitHub; the article and the file are also on Infostart. New versions are published only on GitHub.</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Скачать бесплатно можно на GitHub; статья и файл есть и на Инфостарте. Новые версии выходят только на GitHub.</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>OpenArticle</Action>
+		</Command>
+	</Commands>
+</Form>
