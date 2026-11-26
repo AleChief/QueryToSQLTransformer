@@ -297,7 +297,10 @@ def from_sql(value, offset):
 
 
 def composed(row, names, columns, offset):
-    """Значение колонки 1С из колонок SQL: базовая колонка или части по тегу типа."""
+    """Значение колонки 1С из колонок SQL: базовая колонка или части по тегу типа.
+
+    Простую колонку даты обработка уже сдвигает сама (ShiftDates), смещение вычитается только из частей
+    составного значения - их платформа, как и обработка, отдаёт в том виде, в каком они хранятся."""
     index = {name.upper(): position for position, name in enumerate(names)}
     result = []
     for name in columns:
@@ -305,7 +308,7 @@ def composed(row, names, columns, offset):
         tag_at = index.get(key + "_TYPE")
         if tag_at is None:
             at = index.get(key)
-            result.append(INCOMPARABLE if at is None else from_sql(row[at], offset))
+            result.append(INCOMPARABLE if at is None else from_sql(row[at], 0))
             continue
         tag = row[tag_at]
         if tag is None or bytes(tag) == b"\x01":
@@ -384,6 +387,7 @@ def check(ib, processor, cursor, offset, path):
     options = processor.DefaultOptions()
     options.Insert("Dialect", "MSSQL")
     options.Insert("DateOffset", offset)
+    options.Insert("ShiftDates", True)
     options.Insert("SubstituteParameters", True)
     options.Insert("Prologue", prologue)
     mapping = ib.NewObject("Map")

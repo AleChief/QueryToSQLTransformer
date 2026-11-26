@@ -1,4 +1,4 @@
-﻿// QueryToSQLTransformer 0.3.0 - translates a 1C query into T-SQL (MS SQL Server) / PostgreSQL.
+﻿// QueryToSQLTransformer 0.3.1 - translates a 1C query into T-SQL (MS SQL Server) / PostgreSQL.
 // Author:   Aleksei Iaskeliainen
 // Licence:  MIT + Commons Clause - free to use, change and embed, including in a company;
 //           selling the processor or a paid service built on it is not allowed.
@@ -119,6 +119,7 @@ Procedure TransformAtServer()
 	Options.SubstituteParameters = True;
 	Options.Prologue = PrologueText;
 	Options.Language = Processor.SessionLanguage();
+	Options.ShiftDates = True;
 
 	Result = Processor.Transform(QueryText, Options);
 

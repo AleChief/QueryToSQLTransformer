@@ -329,11 +329,11 @@
 			<Title formatted="false">
 				<v8:item>
 					<v8:lang>en</v8:lang>
-					<v8:content>QueryToSQLTransformer 0.3.0 · author Aleksei Iaskeliainen · MIT + Commons Clause licence · free download on GitHub, the article is on Infostart; new versions are published only on GitHub</v8:content>
+					<v8:content>QueryToSQLTransformer 0.3.1 · author Aleksei Iaskeliainen · MIT + Commons Clause licence · free download on GitHub, the article is on Infostart; new versions are published only on GitHub</v8:content>
 				</v8:item>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>QueryToSQLTransformer 0.3.0 · автор Aleksei Iaskeliainen · лицензия MIT + Commons Clause · скачать бесплатно можно на GitHub, статья на Инфостарте; новые версии выходят только на GitHub</v8:content>
+					<v8:content>QueryToSQLTransformer 0.3.1 · автор Aleksei Iaskeliainen · лицензия MIT + Commons Clause · скачать бесплатно можно на GitHub, статья на Инфостарте; новые версии выходят только на GitHub</v8:content>
 				</v8:item>
 			</Title>
 			<ContextMenu name="AboutContextMenu" id="61"/>

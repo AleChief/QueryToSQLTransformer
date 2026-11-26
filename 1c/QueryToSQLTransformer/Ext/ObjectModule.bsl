@@ -1,4 +1,4 @@
-﻿// QueryToSQLTransformer 0.3.0 - translates a 1C query into T-SQL (MS SQL Server) / PostgreSQL.
+﻿// QueryToSQLTransformer 0.3.1 - translates a 1C query into T-SQL (MS SQL Server) / PostgreSQL.
 // Author:   Aleksei Iaskeliainen
 // Licence:  MIT + Commons Clause - free to use, change and embed, including in a company;
 //           selling the processor or a paid service built on it is not allowed.
@@ -25,7 +25,7 @@ Function ExternalDataProcessorInfo() Export
 	Registration = New Structure;
 	Registration.Insert("Name", ?(SessionLanguage() = "ru", "Транслятор запросов 1С в SQL",
 		"Query to SQL transformer"));
-	Registration.Insert("Version", "0.3.0");
+	Registration.Insert("Version", "0.3.1");
 	Registration.Insert("SafeMode", False);
 	Registration.Insert("Information", ?(SessionLanguage() = "ru",
 		"Переводит запрос 1С в T-SQL или PostgreSQL для прямого доступа к базе. Скачать бесплатно можно на GitHub "
@@ -50,6 +50,9 @@ EndFunction
 //                          parameter (ИЗ &Имя) is taken from a temporary table with the same name.
 //    * Language - String - "en" or "ru": the language of ErrorDescription and Warnings. The form passes the
 //                          language of the session (SessionLanguage).
+//    * ShiftDates - Boolean - date columns of the final result come back as dates of 1C, without the year
+//                          offset of the infobase. The platform reads them shifted and subtracts the offset
+//                          itself after the query; False returns them as stored. The form turns it on.
 //
 Function DefaultOptions() Export
 
@@ -61,6 +64,7 @@ Function DefaultOptions() Export
 	Options.Insert("SubstituteParameters", False);
 	Options.Insert("Prologue", "");
 	Options.Insert("Language", "en");
+	Options.Insert("ShiftDates", False);
 	Return Options;
 
 EndFunction
@@ -11935,6 +11939,55 @@ Procedure CheckFieldWithoutParts(Original, Column, PartSuffixes, Context = Undef
 
 EndProcedure
 
+// Колонка, все типы которой (кроме Null) - дата.
+Function IsPlainDateType(ValueType)
+
+	Found = False;
+	For Each Item In ValueType.Types() Do
+		If Item = Type("Null") Then
+			Continue;
+		ElsIf Item = Type("Date") Then
+			Found = True;
+		Else
+			Return False;
+		EndIf;
+	EndDo;
+	Return Found;
+
+EndFunction
+
+// Колонка - сам параметр, и его значение - дата: тип такой колонки схема не знает, а значение подставлено
+// в хранимом виде, со смещением, как для сравнения с полями.
+Function DateParameterColumn(Original, Context)
+
+	Text = TrimAll(Original);
+	If Left(Text, 1) <> "&" Or Not Context.Options.Property("ParameterValues")
+		Or TypeOf(Context.Options.ParameterValues) <> Type("Map") Then
+		Return False;
+	EndIf;
+	Name = Upper(Mid(Text, 2));
+	For Each Item In Context.Options.ParameterValues Do
+		If Upper(Item.Key) = Name Then
+			Return TypeOf(Item.Value) = Type("Date");
+		EndIf;
+	EndDo;
+	Return False;
+
+EndFunction
+
+// Дата итогового результата без смещения лет: платформа читает её со смещением и вычитает его сама после
+// запроса. В MS SQL колонка хранится как datetime, а пустая дата при смещении 2000 - это 2001-01-01, и вычитание
+// внутри datetime дало бы год 1, которого этот тип не держит, - поэтому сначала datetime2.
+Function DateWithoutOffset(Expression, Context)
+
+	Shift = Format(Context.Options.DateOffset, "NG=0; NZ=0");
+	If Context.Options.Dialect = "PostgreSQL" Then
+		Return "(" + Expression + " - INTERVAL '" + Shift + " years')";
+	EndIf;
+	Return "DATEADD(YEAR, -" + Shift + ", CAST(" + Expression + " AS DATETIME2(0)))";
+
+EndFunction
+
 Function SelectedFieldsSql(Operator, Query, Context, IsFirstOperator)
 
 	Nested = NestedTableColumns(Query, Context);
@@ -12170,6 +12223,13 @@ Function SelectedFieldsSql(Operator, Query, Context, IsFirstOperator)
 			Expression = PlacedSmallNumberSql(Expression, Original, Query.Columns[FieldIndex].ValueType, Context);
 		ElsIf Query.Operators.Count() > 1 And FieldIndex < Query.Columns.Count() Then
 			Expression = UnionQuotientSql(Expression, Original, Query, FieldIndex, Context);
+		EndIf;
+
+		If Context.FinalResult And FieldIndex < Query.Columns.Count() And PitParts = Undefined
+			And Context.Options.Property("ShiftDates") And Context.Options.ShiftDates = True
+			And Context.Options.DateOffset <> 0 And (IsPlainDateType(Query.Columns[FieldIndex].ValueType)
+				Or DateParameterColumn(Original, Context)) Then
+			Expression = DateWithoutOffset(Expression, Context);
 		EndIf;
 
 		If WithAliases And FieldIndex < Query.Columns.Count() Then
